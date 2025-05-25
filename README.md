@@ -1,5 +1,3 @@
-(probably broken right now, will remove when this actually works)
-
 ### DropOffLock mod for Minecraft.
 ***
 Mod, in functionality similar to the DropOff button from the [Quark](https://minecraft.curseforge.com/projects/quark), but with hot key and flexible configuration for any needs.
