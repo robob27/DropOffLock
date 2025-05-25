@@ -1,49 +1,49 @@
 buildscript {
     repositories {
-        jcenter()
-        maven {
-            url = "http://files.minecraftforge.net/maven"
-        }
+        maven { url 'https://maven.minecraftforge.net/' }
+        mavenCentral()
+        flatDir name: 'libs', dirs: "$projectDir/libs"
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:5.+'
     }
 }
 
-apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: 'net.minecraftforge.gradle'
 
+version = "1.12.2-0.1.0a"
+group = "robob27.mod.dropofflock"
+archivesBaseName = "dropofflock"
 
-version = "1.12.2-1.0.2b"
-group = "scp002.mod.dropoff"
-archivesBaseName = "dropoff"
-
-sourceCompatibility = targetCompatibility = "1.8"
-compileJava {
-    sourceCompatibility = targetCompatibility = "1.8"
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    version = "1.12.2-14.23.4.2749"
-    runDir = "run"
-    mappings = "snapshot_20171003"
+  mappings channel: 'snapshot', version: '20171003-1.12'
+  accessTransformer = file('src/main/resources/invtweaks_at.cfg')
+	
+	runs {
+		"client" {
+			workingDirectory file("./run")
+			mods { "${project.name}" { source sourceSets.main } }
+		}
+		
+		"server" {
+			workingDirectory file("./run/server")
+			mods { "${project.name}" { source sourceSets.main } }
+		}
+	}
 }
 
 dependencies {
+  minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
+
+  implementation files('libs/UnknownLibs-1.1.2.jar')
 }
 
 processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
-
-        expand "version": project.version, "mcversion": project.minecraft.version
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
-    }
-
-    exclude "invtweaks_at.cfg"
+	inputs.property "version", project.version
+	
+	filesMatching("mcmod.info") {
+		expand "version": project.version
+	}
 }
